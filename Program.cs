@@ -18,14 +18,14 @@ int  LENGTH = 10;
  
 
 int[] code_mass = new int[LENGTH];
-int[] adres_mass = new int[LENGTH];
+int[] adres_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
 int[] count_mass = new int[10] {34, 54, 56, 29, 6, 582, 116, 34, 55, 78};
  
 for (int i = 0; i < LENGTH; i++)
     code_mass[i] = 20 + i;
 
-for (int i = 0; i < LENGTH; i++)
-    adres_mass[i] = 200 + i;
+//for (int i = 0; i < LENGTH; i++)
+  //  adres_mass[i] = 200 + i;
 
 
 Detail[] Detail1 = new Detail[LENGTH];
@@ -84,16 +84,59 @@ do
             cont = Exit();
             break;
         case 7:
-            SortAdres();
+            PrintMass(LENGTH, SortAdres(Detail1));
             cont = Exit();
             break;
     }
 
 } while (cont);
 
-void SortAdres()
-{
+/*Detail[] SortAdres(Detail[] Detail1)
+    {
+    Detail[] Detail2 = new Detail[LENGTH];
+    int step = Detail1.Length / 2;
+        while (step > 0)
+        {
+            int i, j;
+            for (i = step; i < Detail1.Length; i++)
+            {
+                int value = Detail1[i].Code;
+                for (j = i - step; (j >= 0) && (Detail1[j].Code > value); j -= step)
+                Detail2[j + step] = Detail1[j];
+            Detail1[j + step].Code = value;
+            }
+            step /= 2;
+        }
+        return Detail2;
+    }
+*/
 
+Detail[] SortAdres(Detail[] Detail1)
+{
+    Detail[] Detail2 = new Detail[LENGTH];
+    for (int i = 0; i < Detail1.Length; i++)
+    {
+        for (int j = 0; j < Detail1.Length - 1; j++)
+        {
+            if (Detail1[j].Code > Detail1[j + 1].Code)
+            {
+                Detail temp = new(0, 0, 0)
+                {
+                    Code = Detail1[j].Code,
+                    Adres = Detail1[j].Adres,
+                    Count = Detail1[j].Count
+                };
+                Detail1[j].Code = Detail1[j + 1].Code;
+                Detail1[j].Adres = Detail1[j+1].Adres;
+                Detail1[j].Count = Detail1[j+1].Count;
+                Detail1[j + 1].Code = temp.Code;
+                Detail1[j + 1].Adres = temp.Adres;
+                Detail1[j+ 1].Count = temp.Count;
+            }
+        }
+    }
+    Array.Sort(Detail1, Detail2);
+    return Detail1;
 }
 
 void SearchCountAll()
