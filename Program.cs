@@ -41,17 +41,7 @@ int Answer()
     return result;
 }
 
-bool Exit()
-{
-    bool exit = true;
-    Console.WriteLine("Для выхода нажмите 0");
-    int vixod = Answer();
-    if (vixod == 0)
-        exit = false;
-    return exit;
-}
-
-bool cont = true;
+bool cont = false;
 
 do
 {
@@ -61,34 +51,29 @@ do
     {
         case 1:
             PrintMass(Priem(LENGTH, Detail1).Length, Priem(LENGTH, Detail1));
-            cont = Exit();
             break;
         case 2:
             PrintMass(Otgruz(LENGTH, Detail1).Length - 1, Otgruz(LENGTH, Detail1));
-            cont = Exit();
             break;
         case 3:
             PrintMass(LENGTH, Detail1);
-            cont = Exit();
             break;
         case 4:
             SortCode();
-            cont = Exit();
             break;
         case 5:
             SearchCountCode();
-            cont = Exit();
             break;
         case 6:
             SearchCountAll();
-            cont = Exit();
             break;
         case 7:
             PrintMass(LENGTH, SortAdres(Detail1));
-            cont = Exit();
+            break;
+        case 0:
+            Convert.ToInt32(Console.ReadLine());
             break;
     }
-
 } while (cont);
 
 /*Detail[] SortAdres(Detail[] Detail1)
