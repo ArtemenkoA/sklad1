@@ -51,10 +51,10 @@ do
     switch (vibor)
     {
         case 1:
-            PrintMass(Priem(LENGTH, Detail1).Length, Priem(LENGTH, Detail1));
+            PrintMass(Detail1.Length, Priem(LENGTH, Detail1));
             break;
         case 2:
-            PrintMass(Otgruz(LENGTH, Detail1).Length - 1, Otgruz(LENGTH, Detail1));
+            PrintMass(Detail1.Length - 1, Otgruz(LENGTH, Detail1));
             break;
         case 3:
             PrintMass(LENGTH, Detail1);
@@ -115,8 +115,7 @@ Detail[] SortAdres(Detail[] Detail1)
             }
         }
     }
-    // а тут что хотим сделать?
-    // Array.Sort(Detail1, Detail2);
+   
     return Detail2;
 }
 
