@@ -9,12 +9,12 @@ int  LENGTH = 10;
 
 
 //sklad1.Storage storage = new sklad1.Storage(2);
- sg
+ 
 
 int[] code_mass = new int[LENGTH];
 int[] adres_mass = new int[LENGTH];
 int[] count_mass = new int[10] {34, 54, 56, 29, 6, 582, 116, 34, 55, 78};
-
+ 
 for (int i = 0; i < LENGTH; i++)
     code_mass[i] = 20 + i;
 
@@ -65,7 +65,7 @@ int PrintMenu(string name)
 
         success = int.TryParse(str, out result);
 
-        if (!success && result > 8)
+        if (!success)
         {
             Console.WriteLine("Не удалось распознать команду, введите еще раз", str);
         }
@@ -77,30 +77,64 @@ int PrintMenu(string name)
 
 Console.WriteLine(vibor);//отладочная печать
 
-switch (vibor)
+bool cont = true;
+string str1;
+do
 {
-    case 1:
-        PrintMass(Priem(LENGTH, Detail1).Length, Priem(LENGTH, Detail1));
-        break;
-    case 2: 
-        PrintMass(Otgruz(LENGTH, Detail1).Length-1, Otgruz(LENGTH, Detail1));
-        break;
-    case 3:
-        PrintMass(LENGTH, Detail1);
-        break;
-    case 4:
-        SortCode();
-        break;
-    case 5:
-        SearchCountCode();
-        break;
-    case 6:
-       // SearchCountAll();
-        break;
-    case 7:
-        SortAdres();
-        break;
-}
+    switch (vibor)
+    {
+        case 1:
+            PrintMass(Priem(LENGTH, Detail1).Length, Priem(LENGTH, Detail1));
+            Console.WriteLine("Для выхода нажмите N");
+            str1 = Console.ReadLine();
+            if (str1 == "N")
+                cont = false;
+            break;
+        case 2:
+            PrintMass(Otgruz(LENGTH, Detail1).Length - 1, Otgruz(LENGTH, Detail1));
+            Console.WriteLine("Для выхода нажмите N");
+            str1 = Console.ReadLine();
+            if (str1 == "N")
+                cont = false;
+            break;
+        case 3:
+            PrintMass(LENGTH, Detail1);
+            Console.WriteLine("Для выхода нажмите N");
+            str1 = Console.ReadLine();
+            if (str1 == "N")
+                cont = false;
+            break;
+        case 4:
+            SortCode();
+            Console.WriteLine("Для выхода нажмите N");
+            str1 = Console.ReadLine();
+            if (str1 == "N")
+                cont = false;
+            break;
+        case 5:
+            SearchCountCode();
+            Console.WriteLine("Для выхода нажмите N");
+            str1 = Console.ReadLine();
+            if (str1 == "N")
+                cont = false;
+            break;
+        case 6:
+            // SearchCountAll();
+            Console.WriteLine("Для выхода нажмите N");
+            str1 = Console.ReadLine();
+            if (str1 == "N")
+                cont = false;
+            break;
+        case 7:
+            SortAdres();
+            Console.WriteLine("Для выхода нажмите N");
+            str1 = Console.ReadLine();
+            if (str1 == "N")
+                cont = false;
+            break;
+    }
+
+} while (cont);
 
 void SortAdres()
 {
