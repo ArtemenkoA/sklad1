@@ -9,7 +9,7 @@ int  LENGTH = 10;
 
 
 //sklad1.Storage storage = new sklad1.Storage(2);
-
+ sg
 
 int[] code_mass = new int[LENGTH];
 int[] adres_mass = new int[LENGTH];
