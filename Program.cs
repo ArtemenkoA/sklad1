@@ -1,7 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Xml.Linq;
 
-int vibor = PrintMenu("ВЫБЕРИТЕ ДЕЙСТВИЕ");
+Console.WriteLine("ВЫБЕРИТЕ ДЕЙСТВИЕ:");
+Console.WriteLine("1 - Приемка");
+Console.WriteLine("2 - Отгрузка");
+Console.WriteLine("3 - Вывод на экран");
+Console.WriteLine("4 - Фильтрация массива по коду");
+Console.WriteLine("5 - Поиск суммарного кол-ва по заданному коду");
+Console.WriteLine("6 - Поиск суммарного кол-ва по каждому из кодов детали");
+Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
 
 Random random = new Random();
 
@@ -45,92 +52,57 @@ int code10 = 21; int adres10 = 209;*/
 
 
 
-int PrintMenu(string name)
+int Answer()
 {
-    Console.WriteLine("ВЫБЕРИТЕ ДЕЙСТВИЕ:");
-    Console.WriteLine("1 - Приемка");
-    Console.WriteLine("2 - Отгрузка");
-    Console.WriteLine("3 - Вывод на экран");
-    Console.WriteLine("4 - Фильтрация массива по коду");
-    Console.WriteLine("5 - Поиск суммарного кол-ва по заданному коду");
-    Console.WriteLine("6 - Поиск суммарного кол-ва по каждому из кодов детали");
-    Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
-    string str;
-    int result;
-    bool success;
-
-    do
-    {
-        str = Console.ReadLine();
-
-        success = int.TryParse(str, out result);
-
-        if (!success)
-        {
-            Console.WriteLine("Не удалось распознать команду, введите еще раз", str);
-        }
-    }
-    while (!success);
-
+    int result = Convert.ToInt32(Console.ReadLine());
     return result;
 }
 
-Console.WriteLine(vibor);//отладочная печать
+bool Exit()
+{
+    bool exit = true;
+    Console.WriteLine("Для выхода нажмите 0");
+    int vixod = Answer();
+    if (vixod == 0)
+        exit = false;
+    return exit;
+}
 
 bool cont = true;
-string str1;
+
 do
 {
+    int vibor = Answer();
+    
     switch (vibor)
     {
         case 1:
             PrintMass(Priem(LENGTH, Detail1).Length, Priem(LENGTH, Detail1));
-            Console.WriteLine("Для выхода нажмите N");
-            str1 = Console.ReadLine();
-            if (str1 == "N")
-                cont = false;
+            cont = Exit();
             break;
         case 2:
             PrintMass(Otgruz(LENGTH, Detail1).Length - 1, Otgruz(LENGTH, Detail1));
-            Console.WriteLine("Для выхода нажмите N");
-            str1 = Console.ReadLine();
-            if (str1 == "N")
-                cont = false;
+            cont = Exit();
             break;
         case 3:
             PrintMass(LENGTH, Detail1);
-            Console.WriteLine("Для выхода нажмите N");
-            str1 = Console.ReadLine();
-            if (str1 == "N")
-                cont = false;
+            cont = Exit();
             break;
         case 4:
             SortCode();
-            Console.WriteLine("Для выхода нажмите N");
-            str1 = Console.ReadLine();
-            if (str1 == "N")
-                cont = false;
+            cont = Exit();
             break;
         case 5:
             SearchCountCode();
-            Console.WriteLine("Для выхода нажмите N");
-            str1 = Console.ReadLine();
-            if (str1 == "N")
-                cont = false;
+            cont = Exit();
             break;
         case 6:
             // SearchCountAll();
-            Console.WriteLine("Для выхода нажмите N");
-            str1 = Console.ReadLine();
-            if (str1 == "N")
-                cont = false;
+            cont = Exit();
             break;
         case 7:
             SortAdres();
-            Console.WriteLine("Для выхода нажмите N");
-            str1 = Console.ReadLine();
-            if (str1 == "N")
-                cont = false;
+            cont = Exit();
             break;
     }
 
@@ -181,23 +153,8 @@ void SortAdres()
 
 void SearchCountCode()
 {
-    string? code = "";
-    int code_int = 0;
-    bool success;
     Console.WriteLine("Введите код детали:");
-
-    do
-    {
-        code = Console.ReadLine();
-
-        success = int.TryParse(code, out code_int);
-
-        if (!success)
-        {
-            Console.WriteLine("Не удалось распознать, введите еще раз", code);
-        }
-    }
-    while (!success);
+    int code_int = Convert.ToInt32(Console.ReadLine());
 
     for (int i = 0; i < Detail1.Length; i++)
     {
@@ -212,23 +169,8 @@ void SearchCountCode()
 
 void SortCode()
 {
-    string? code = "";
-    int code_int = 0;
-    bool success;
     Console.WriteLine("Введите код детали:");
-
-    do
-    {
-        code = Console.ReadLine();
-
-        success = int.TryParse(code, out code_int);
-
-        if (!success)
-        {
-            Console.WriteLine("Не удалось распознать, введите еще раз", code);
-        }
-    }
-    while (!success);
+    int code_int = Convert.ToInt32(Console.ReadLine());
 
     for (int i = 0; i < Detail1.Length; i++)
     {
@@ -253,23 +195,9 @@ void PrintMass(int LENGTH, Detail[] Detail1)
 
 Detail[] Otgruz(int LENGTH, Detail[] Detail1)
 {
-    string? code;
-    int code_int;
-    bool success;
     Console.WriteLine("Введите код детали, которую хотите удалить:");
 
-    do
-    {
-        code = Console.ReadLine();
-
-        success = int.TryParse(code, out code_int);
-
-        if (!success)
-        {
-            Console.WriteLine("Не удалось распознать, введите еще раз");
-        }
-    }
-    while (!success);
+    int code_int = Convert.ToInt32(Console.ReadLine());
 
     Detail[] Detail2 = new Detail[LENGTH];
 
@@ -295,55 +223,14 @@ Detail[] Otgruz(int LENGTH, Detail[] Detail1)
 
 Detail[] Priem(int LENGTH, Detail[] Detail1)
 {
-    string? code = "", adres = "", count = "";
-    int code_int = 0, adres_int = 0, count_int = 0;
-
-    bool success;
-
     Console.WriteLine("Введите код детали:");
-
-    do
-    {
-        code = Console.ReadLine();
-
-        success = int.TryParse(code, out code_int);
-
-        if (!success)
-        {
-            Console.WriteLine("Не удалось распознать, введите еще раз");
-        }
-    }
-    while (!success);
+    int code_int = Convert.ToInt32(Console.ReadLine()); 
 
     Console.WriteLine("Введите адрес ячейки:");
-
-    do
-    {
-         adres = Console.ReadLine();
-
-        success = int.TryParse(adres, out adres_int);
-
-        if (!success)
-        {
-            Console.WriteLine("Не удалось распознать, введите еще раз");
-        }
-    }
-    while (!success);
-
+    int adres_int = Convert.ToInt32(Console.ReadLine());
+    
     Console.WriteLine("Введите количество:");
-
-    do
-    {
-        count = Console.ReadLine();
-
-        success = int.TryParse(count, out count_int);
-
-        if (!success)
-        {
-            Console.WriteLine("Не удалось распознать, введите еще раз");
-        }
-    }
-    while (!success);
+    int count_int = Convert.ToInt32(Console.ReadLine());
 
    int LENGTH2 = LENGTH+1;
     Detail[] Detail2 = new Detail[LENGTH2];
