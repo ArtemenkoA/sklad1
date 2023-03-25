@@ -93,7 +93,7 @@ do
         return Detail2;
     }
 */
-
+ 
 Detail[] SortAdres(Detail[] Detail1)
 {
     Detail[] Detail2 = new Detail[Detail1.Length];//тут нужно не [LENGTH]; т.к. длина нужна такая же как и в Detail1
