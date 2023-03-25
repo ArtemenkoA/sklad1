@@ -100,8 +100,6 @@ void SearchCountAll()
 {
     int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
 
-
-
     for (int i = 0; i < Detail1.Length; i++)
     {
         for (int j = 0; j < arr.Length; j++)
