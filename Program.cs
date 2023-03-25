@@ -41,12 +41,13 @@ int Answer()
     return result;
 }
 
-bool cont = false;
+int vibor; 
 
 do
 {
-    int vibor = Answer();
+    vibor = Answer();
     
+    Console.WriteLine("Для выхода нажмите 0");
     switch (vibor)
     {
         case 1:
@@ -70,11 +71,8 @@ do
         case 7:
             PrintMass(LENGTH, SortAdres(Detail1));
             break;
-        case 0:
-            Convert.ToInt32(Console.ReadLine());
-            break;
     }
-} while (cont);
+} while (vibor != 0);
 
 /*Detail[] SortAdres(Detail[] Detail1)
     {
