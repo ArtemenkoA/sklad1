@@ -93,7 +93,7 @@ do
         return Detail2;
     }
 */
- 
+
 Detail[] SortAdres(Detail[] Detail1)
 {
     Detail[] Detail2 = new Detail[Detail1.Length];//тут нужно не [LENGTH]; т.к. длина нужна такая же как и в Detail1
@@ -101,23 +101,30 @@ Detail[] SortAdres(Detail[] Detail1)
     uint counter = 0;
     foreach (Detail detail in Detail1)
     {
-        for (int j = 0; j < Detail1.Length - 1; j++)
+        Detail2[counter++] = detail;
+    }
+    //обрабатываем скопированный массив, чтобы вернуть отсортированную копию, но не трогаем оригинал 
+    for (int i = 0; i < Detail2.Length - 1; i++)
+    {
+        for (int j = i + 1; j < Detail2.Length; j++)
         {
-            if (Detail1[j].Adres > Detail1[j + 1].Adres)
+            if (Detail2[i].Adres > Detail2[j].Adres)
             {
-                Detail temp = new(Detail1[j].Code, Detail1[j].Adres, Detail1[j].Count);
-                
-                Detail1[j].Code = Detail1[j + 1].Code;
-                Detail1[j].Adres = Detail1[j+1].Adres;
-                Detail1[j].Count = Detail1[j+1].Count;
-                Detail1[j + 1].Code = temp.Code;
-                Detail1[j + 1].Adres = temp.Adres;
-                Detail1[j+ 1].Count = temp.Count;
+                //используем самописный swap
+                swapDetail(ref Detail2[i], ref Detail2[j]);
             }
         }
     }
-    //Array.Sort(Detail1, Detail2);
-    return Detail1;
+    // а тут что хотим сделать?
+    // Array.Sort(Detail1, Detail2);
+    return Detail2;
+}
+
+void swapDetail(ref Detail detail1, ref Detail detail2)
+{
+    Detail temp = detail1;
+    detail1 = detail2;
+    detail2 = temp;
 }
 
 void SearchCountAll()
