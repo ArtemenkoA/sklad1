@@ -98,6 +98,7 @@ void SortAdres()
 
 void SearchCountAll()
 {
+    Console.WriteLine("Введите код детали:");
     int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
 
     for (int i = 0; i < Detail1.Length; i++)
