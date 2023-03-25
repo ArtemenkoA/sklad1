@@ -10,7 +10,6 @@ Console.WriteLine("5 - Поиск суммарного кол-ва по зада
 Console.WriteLine("6 - Поиск суммарного кол-ва по каждому из кодов детали");
 Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
 
-Random random = new Random();
 
 int  LENGTH = 10;
 
@@ -34,22 +33,6 @@ for (int i = 0; i < LENGTH; i++)
 {
     Detail1[i] = new Detail(code_mass[i], adres_mass[i], count_mass[i]);
 }
-
-
-
-/*
-int code1 = 20; int adres1 = 200;
-int code2 = 21; int adres2 = 201;
-int code3 = 20; int adres3 = 202;
-int code4 = 21; int adres4 = 203;
-int code5 = 20; int adres5 = 204;
-int code6 = 21; int adres6 = 205;
-int code7 = 20; int adres7 = 206;
-int code8 = 21; int adres8 = 207;
-int code9 = 20; int adres9 = 208;
-int code10 = 21; int adres10 = 209;*/
-
-
 
 
 int Answer()
@@ -97,7 +80,7 @@ do
             cont = Exit();
             break;
         case 6:
-            // SearchCountAll();
+            SearchCountAll();
             cont = Exit();
             break;
         case 7:
@@ -113,43 +96,24 @@ void SortAdres()
 
 }
 
-/*void SearchCountAll()
+void SearchCountAll()
 {
-    string[] code = new string[10];
-    int[] code_int = new int[10];
-    bool success;
-
-    for (int i = 0; i < 10; i++)
-    {
-        Console.WriteLine("Введите код детали:");
-        do
-        {
-
-            code = Console.ReadLine();
+    int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
 
 
-            success = int.TryParse(code[i], out code_int[i]);
-
-            if (!success)
-            {
-                Console.WriteLine("Не удалось распознать, введите еще раз", code);
-            }
-        }
-        while (!success);
-    }
 
     for (int i = 0; i < Detail1.Length; i++)
     {
-        for (int j = 0; j < code_int.Length; j++)
+        for (int j = 0; j < arr.Length; j++)
         {
 
-            if (code_int[j] == Detail1[i].Code)
+            if (arr[j] == Detail1[i].Code)
             {
                 Console.WriteLine(" Количество деталей c кодом {1} на складе: {0}", Detail1[i].Count, Detail1[i].Code);
             }
         }
     }
-}*/
+}
 
 void SearchCountCode()
 {
