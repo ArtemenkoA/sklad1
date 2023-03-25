@@ -74,25 +74,6 @@ do
     }
 } while (vibor != 0);
 
-/*Detail[] SortAdres(Detail[] Detail1)
-    {
-    Detail[] Detail2 = new Detail[LENGTH];
-    int step = Detail1.Length / 2;
-        while (step > 0)
-        {
-            int i, j;
-            for (i = step; i < Detail1.Length; i++)
-            {
-                int value = Detail1[i].Code;
-                for (j = i - step; (j >= 0) && (Detail1[j].Code > value); j -= step)
-                Detail2[j + step] = Detail1[j];
-            Detail1[j + step].Code = value;
-            }
-            step /= 2;
-        }
-        return Detail2;
-    }
-*/
 
 Detail[] SortAdres(Detail[] Detail1)
 {
