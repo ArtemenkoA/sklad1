@@ -118,30 +118,23 @@ Detail[] SortAdres(Detail[] Detail1)
     uint counter = 0;
     foreach (Detail detail in Detail1)
     {
-        Detail2[counter++] = detail;
-    }
-    //обрабатываем скопированный массив, чтобы вернуть отсортированную копию, но не трогаем оригинал 
-    for (int i = 0; i < Detail2.Length - 1; i++)
-    {
-        for (int j = i + 1; j < Detail2.Length; j++)
+        for (int j = 0; j < Detail1.Length - 1; j++)
         {
-            if (Detail2[i].Adres > Detail2[j].Adres)
+            if (Detail1[j].Adres > Detail1[j + 1].Adres)
             {
-                //используем самописный swap
-                swapDetail(ref Detail2[i], ref Detail2[j]);
+                Detail temp = new(Detail1[j].Code, Detail1[j].Adres, Detail1[j].Count);
+                
+                Detail1[j].Code = Detail1[j + 1].Code;
+                Detail1[j].Adres = Detail1[j+1].Adres;
+                Detail1[j].Count = Detail1[j+1].Count;
+                Detail1[j + 1].Code = temp.Code;
+                Detail1[j + 1].Adres = temp.Adres;
+                Detail1[j+ 1].Count = temp.Count;
             }
         }
     }
-    // а тут что хотим сделать?
-    // Array.Sort(Detail1, Detail2);
-    return Detail2;
-}
-
-void swapDetail(ref Detail detail1, ref Detail detail2)
-{
-    Detail temp = detail1;
-    detail1 = detail2;
-    detail2 = temp;
+    //Array.Sort(Detail1, Detail2);
+    return Detail1;
 }
 
 void SearchCountAll()
