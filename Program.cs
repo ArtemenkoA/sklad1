@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using System.IO;
 using System;
-
+using System.Linq;
 
 internal class Program
 {
@@ -20,11 +20,10 @@ internal class Program
 
         int LENGTH = 10;
 
-
         //sklad1.Storage storage = new sklad1.Storage(2);
 
 
-        int[] code_mass = new int[LENGTH];
+        /*int[] code_mass = new int[LENGTH];
         int[] adres_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
         int[] count_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
 
@@ -34,32 +33,33 @@ internal class Program
         //for (int i = 0; i < LENGTH; i++)
         //  adres_mass[i] = 200 + i;
 
-
-        Detail[] Detail1 = new Detail[LENGTH];
-        for (int i = 0; i < LENGTH; i++)
+        */
+       // Detail[] Detail1 = new Detail[LENGTH];
+        /*for (int i = 0; i < LENGTH; i++)
         {
             Detail1[i] = new Detail(code_mass[i], adres_mass[i], count_mass[i]);
         }
 
-
+        */
 
         string path = @"C:\Users\79152\source\repos\sklad1\Details.bat";
 
-        using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
-        {
-            //Detail[] Detail1 = new Detail[20];
+        /* using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+         {
+             //Detail[] Detail1 = new Detail[20];
 
-            foreach (Detail Detail_bin in Detail1)
-            {
-                writer.Write(Detail_bin.Code);
-                writer.Write(Detail_bin.Adres);
-                writer.Write(Detail_bin.Count);
-            }
-        }
+             foreach (Detail Detail_bin in Detail1)
+             {
+                 writer.Write(Detail_bin.Code);
+                 writer.Write(Detail_bin.Adres);
+                 writer.Write(Detail_bin.Count);
+             }
+         }
+        */
+        List<Detail> Details_bin = new List<Detail>();
 
         using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
         {
-            List<Detail> Details_bin = new List<Detail>();
             while (reader.PeekChar() > -1)
             {
                 int code = reader.ReadInt32();
@@ -67,13 +67,16 @@ internal class Program
                 int count = reader.ReadInt32();
                 Details_bin.Add(new Detail(code, adres, count));
             }
-            foreach (Detail Details in Details_bin)
-            {
-                Console.WriteLine($"Код: {Details.Code}  Адрес: {Details.Adres}   Количество{Details.Count}");
-            }
+            
         }
 
-       
+        Detail[] Detail1 = new Detail[20];
+        Detail1 = Details_bin.ToArray();
+
+        for (int i = 0; i < Detail1.Length; i++)
+        {
+            Console.WriteLine($"Код: {Detail1[i].Code}  Адрес: {Detail1[i].Adres}   Количество:{Detail1[i].Count}");
+        }
 
 
         int Answer()
@@ -257,11 +260,11 @@ internal class Program
             Detail2[LENGTH2 - 1] = new Detail(code_int, adres_int, count_int);
 
             return Detail2;
-        }
+        } 
     }
 }
 
-struct Detail
+class Detail
 {
     private int code, adres, count;
 
