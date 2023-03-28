@@ -1,225 +1,251 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Xml.Linq;
-
-Console.WriteLine("ВЫБЕРИТЕ ДЕЙСТВИЕ:");
-Console.WriteLine("1 - Приемка");
-Console.WriteLine("2 - Отгрузка");
-Console.WriteLine("3 - Вывод на экран");
-Console.WriteLine("4 - Фильтрация массива по коду");
-Console.WriteLine("5 - Поиск суммарного кол-ва по заданному коду");
-Console.WriteLine("6 - Поиск суммарного кол-ва по каждому из кодов детали");
-Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
-
-
-int  LENGTH = 10;
-
-
-//sklad1.Storage storage = new sklad1.Storage(2);
- 
-
-int[] code_mass = new int[LENGTH];
-int[] adres_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
-int[] count_mass = new int[10] {34, 54, 56, 29, 6, 582, 116, 34, 55, 78};
- 
-for (int i = 0; i < LENGTH; i++)
-    code_mass[i] = 20 + i;
-
-//for (int i = 0; i < LENGTH; i++)
-  //  adres_mass[i] = 200 + i;
-
-
-Detail[] Detail1 = new Detail[LENGTH];
-for (int i = 0; i < LENGTH; i++)
+using System.IO;
+internal class Program
 {
-    Detail1[i] = new Detail(code_mass[i], adres_mass[i], count_mass[i]);
-}
-
-
-int Answer()
-{
-    int result = Convert.ToInt32(Console.ReadLine());
-    return result;
-}
-
-int vibor; 
-
-do
-{
-    vibor = Answer();
-    
-    Console.WriteLine("Для выхода нажмите 0");
-    switch (vibor)
+    private static void Main(string[] args)
     {
-        case 1:
-            PrintMass(Detail1.Length, Priem(LENGTH, Detail1));
-            break;
-        case 2:
-            PrintMass(Detail1.Length - 1, Otgruz(LENGTH, Detail1));
-            break;
-        case 3:
-            PrintMass(LENGTH, Detail1);
-            break;
-        case 4:
-            SortCode();
-            break;
-        case 5:
-            SearchCountCode();
-            break;
-        case 6:
-            SearchCountAll();
-            break;
-        case 7:
-            PrintMass(LENGTH, SortAdres(Detail1));
-            break;
-    }
-} while (vibor != 0);
+        Console.WriteLine("ВЫБЕРИТЕ ДЕЙСТВИЕ:");
+        Console.WriteLine("1 - Приемка");
+        Console.WriteLine("2 - Отгрузка");
+        Console.WriteLine("3 - Вывод на экран");
+        Console.WriteLine("4 - Фильтрация массива по коду");
+        Console.WriteLine("5 - Поиск суммарного кол-ва по заданному коду");
+        Console.WriteLine("6 - Поиск суммарного кол-ва по каждому из кодов детали");
+        Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
 
 
-Detail[] SortAdres(Detail[] Detail1)
-{
-    Detail[] Detail2 = new Detail[Detail1.Length];//тут нужно не [LENGTH]; т.к. длина нужна такая же как и в Detail1
-    //копируем исходный массив в нужный
-    uint counter = 0;
-    foreach (Detail detail in Detail1)
-    {
-        Detail2[counter++] = detail;
-    }
-    //обрабатываем скопированный массив, чтобы вернуть отсортированную копию, но не трогаем оригинал 
-    for (int i = 0; i < Detail2.Length - 1; i++)
-    {
-        for (int j = i + 1; j < Detail2.Length; j++)
+        int LENGTH = 10;
+
+
+        //sklad1.Storage storage = new sklad1.Storage(2);
+
+
+        int[] code_mass = new int[LENGTH];
+        int[] adres_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
+        int[] count_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
+
+        for (int i = 0; i < LENGTH; i++)
+            code_mass[i] = 20 + i;
+
+        //for (int i = 0; i < LENGTH; i++)
+        //  adres_mass[i] = 200 + i;
+
+
+        Detail[] Detail1 = new Detail[LENGTH];
+        for (int i = 0; i < LENGTH; i++)
         {
-            if (Detail2[i].Adres > Detail2[j].Adres)
+            Detail1[i] = new Detail(code_mass[i], adres_mass[i], count_mass[i]);
+        }
+
+        string path = @"C:\Users\79152\source\repos\sklad1\Details.bat";
+
+            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
             {
-                //используем самописный swap
-                swapDetail(ref Detail2[i], ref Detail2[j]);
-            }
-        }
-    }
-   
-    return Detail2;
-}
-
-void swapDetail(ref Detail detail1, ref Detail detail2)
-{
-    Detail temp = detail1;
-    detail1 = detail2;
-    detail2 = temp;
-}
-
-void SearchCountAll()
-{
-    Console.WriteLine("Введите код детали:");
-    int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
-
-    for (int i = 0; i < Detail1.Length; i++)
-    {
-        for (int j = 0; j < arr.Length; j++)
-        {
-
-            if (arr[j] == Detail1[i].Code)
-            {
-                Console.WriteLine(" Количество деталей c кодом {1} на складе: {0}", Detail1[i].Count, Detail1[i].Code);
-            }
-        }
-    }
-}
-
-void SearchCountCode()
-{
-    Console.WriteLine("Введите код детали:");
-    int code_int = Convert.ToInt32(Console.ReadLine());
-
-    for (int i = 0; i < Detail1.Length; i++)
-    {
-
-        if (code_int == Detail1[i].Code)
-        {
-            Console.WriteLine(" Количество деталей на складе: {0}", Detail1[i].Count);
-        }
-    }
-}
-
-
-void SortCode()
-{
-    Console.WriteLine("Введите код детали:");
-    int code_int = Convert.ToInt32(Console.ReadLine());
-
-    for (int i = 0; i < Detail1.Length; i++)
-    {
-
-        if (code_int == Detail1[i].Code)
-        {
-            Console.WriteLine("{0}, {1}, {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
-        }
-    }
-
-}
-
-void PrintMass(int LENGTH, Detail[] Detail1)
-{
-    for (int i = 0; i < LENGTH; i++)
-    {
-        Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
-    }
-}
-
-
-
-Detail[] Otgruz(int LENGTH, Detail[] Detail1)
-{
-    Console.WriteLine("Введите код детали, которую хотите удалить:");
-
-    int code_int = Convert.ToInt32(Console.ReadLine());
-
-    Detail[] Detail2 = new Detail[LENGTH];
-
-    uint count = 0;
-    for (int i = 0; i < LENGTH; i++)
-    {
-         if (code_int != Detail1[i].Code)
-            {
-                Detail2[count++] = Detail1[i];
+                foreach (Detail Detail_bin in Detail1)
+                {
+                    writer.Write(Detail_bin.Code);
+                    writer.Write(Detail_bin.Adres);
+                    writer.Write(Detail_bin.Count);
+                }
             }
 
-         else 
+           /* using(BinaryReader reader = new BinaryReader(File.Open(path,FileMode.Open)))
             {
-            continue;
+                while (reader.PeekChar() > -1)
+                {
+                    Detail[] Detail_bin = new Detail[LENGTH];
+                    Detail1_bin.Code = reader.ReadByte();
+                }
+            }*/
+        
+        
+        int Answer()
+        {
+            int result = Convert.ToInt32(Console.ReadLine());
+            return result;
+        }
+
+        int vibor;
+
+        do
+        {
+            vibor = Answer();
+
+            Console.WriteLine("Для выхода нажмите 0");
+            switch (vibor)
+            {
+                case 1:
+                    PrintMass(Detail1.Length + 1, Priem(LENGTH, Detail1));
+                    break;
+                case 2:
+                    PrintMass(Detail1.Length - 1, Otgruz(LENGTH, Detail1));
+                    break;
+                case 3:
+                    PrintMass(LENGTH, Detail1);
+                    break;
+                case 4:
+                    SortCode();
+                    break;
+                case 5:
+                    SearchCountCode();
+                    break;
+                case 6:
+                    SearchCountAll();
+                    break;
+                case 7:
+                    PrintMass(LENGTH, SortAdres(Detail1));
+                    break;
+            }
+        } while (vibor != 0);
+
+
+        Detail[] SortAdres(Detail[] Detail1)
+        {
+            Detail[] Detail2 = new Detail[Detail1.Length];//тут нужно не [LENGTH]; т.к. длина нужна такая же как и в Detail1
+                                                          //копируем исходный массив в нужный
+            uint counter = 0;
+            foreach (Detail detail in Detail1)
+            {
+                Detail2[counter++] = detail;
+            }
+            //обрабатываем скопированный массив, чтобы вернуть отсортированную копию, но не трогаем оригинал 
+            for (int i = 0; i < Detail2.Length - 1; i++)
+            {
+                for (int j = i + 1; j < Detail2.Length; j++)
+                {
+                    if (Detail2[i].Adres > Detail2[j].Adres)
+                    {
+                        //используем самописный swap
+                        swapDetail(ref Detail2[i], ref Detail2[j]);
+                    }
+                }
             }
 
-    }
+            return Detail2;
+        }
 
-    return Detail2;
+        void swapDetail(ref Detail detail1, ref Detail detail2)
+        {
+            Detail temp = detail1;
+            detail1 = detail2;
+            detail2 = temp;
+        }
+
+        void SearchCountAll()
+        {
+            Console.WriteLine("Введите код детали:");
+            int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
+
+            for (int i = 0; i < Detail1.Length; i++)
+            {
+                for (int j = 0; j < arr.Length; j++)
+                {
+
+                    if (arr[j] == Detail1[i].Code)
+                    {
+                        Console.WriteLine(" Количество деталей c кодом {1} на складе: {0}", Detail1[i].Count, Detail1[i].Code);
+                    }
+                }
+            }
+        }
+
+        void SearchCountCode()
+        {
+            Console.WriteLine("Введите код детали:");
+            int code_int = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < Detail1.Length; i++)
+            {
+
+                if (code_int == Detail1[i].Code)
+                {
+                    Console.WriteLine(" Количество деталей на складе: {0}", Detail1[i].Count);
+                }
+            }
+        }
+
+
+        void SortCode()
+        {
+            Console.WriteLine("Введите код детали:");
+            int code_int = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < Detail1.Length; i++)
+            {
+
+                if (code_int == Detail1[i].Code)
+                {
+                    Console.WriteLine("{0}, {1}, {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
+                }
+            }
+
+        }
+
+        void PrintMass(int LENGTH, Detail[] Detail1)
+        {
+            for (int i = 0; i < LENGTH; i++)
+            {
+                Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
+            }
+        }
+
+
+
+        Detail[] Otgruz(int LENGTH, Detail[] Detail1)
+        {
+            Console.WriteLine("Введите код детали, которую хотите удалить:");
+
+            int code_int = Convert.ToInt32(Console.ReadLine());
+
+            Detail[] Detail2 = new Detail[LENGTH];
+
+            uint count = 0;
+            for (int i = 0; i < LENGTH; i++)
+            {
+                if (code_int != Detail1[i].Code)
+                {
+                    Detail2[count++] = Detail1[i];
+                }
+
+                else
+                {
+                    continue;
+                }
+
+            }
+
+            return Detail2;
+        }
+
+
+
+        Detail[] Priem(int LENGTH, Detail[] Detail1)
+        {
+            Console.WriteLine("Введите код детали:");
+            int code_int = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Введите адрес ячейки:");
+            int adres_int = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Введите количество:");
+            int count_int = Convert.ToInt32(Console.ReadLine());
+
+            int LENGTH2 = LENGTH + 1;
+            Detail[] Detail2 = new Detail[LENGTH2];
+
+            for (int i = 0; i < LENGTH; i++)
+            {
+                Detail2[i] = Detail1[i];
+            }
+            Detail2[LENGTH2 - 1] = new Detail(code_int, adres_int, count_int);
+
+            return Detail2;
+        }
+    }
 }
 
-
-
-Detail[] Priem(int LENGTH, Detail[] Detail1)
-{
-    Console.WriteLine("Введите код детали:");
-    int code_int = Convert.ToInt32(Console.ReadLine()); 
-
-    Console.WriteLine("Введите адрес ячейки:");
-    int adres_int = Convert.ToInt32(Console.ReadLine());
-    
-    Console.WriteLine("Введите количество:");
-    int count_int = Convert.ToInt32(Console.ReadLine());
-
-   int LENGTH2 = LENGTH+1;
-    Detail[] Detail2 = new Detail[LENGTH2];
-
-    for (int i = 0; i < LENGTH; i++)
-    {
-            Detail2[i] = Detail1[i];
-    }
-    Detail2[LENGTH2-1] = new Detail(code_int, adres_int, count_int);
-    
-    return Detail2;
-}
-
-
-class Detail
+struct Detail
 {
     private int code, adres, count;
 
