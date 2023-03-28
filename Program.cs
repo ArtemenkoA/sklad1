@@ -1,6 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Xml.Linq;
 using System.IO;
+using System;
+
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -38,28 +41,41 @@ internal class Program
             Detail1[i] = new Detail(code_mass[i], adres_mass[i], count_mass[i]);
         }
 
+
+
         string path = @"C:\Users\79152\source\repos\sklad1\Details.bat";
 
-            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
-            {
-                foreach (Detail Detail_bin in Detail1)
-                {
-                    writer.Write(Detail_bin.Code);
-                    writer.Write(Detail_bin.Adres);
-                    writer.Write(Detail_bin.Count);
-                }
-            }
+        using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+        {
+            //Detail[] Detail1 = new Detail[20];
 
-           /* using(BinaryReader reader = new BinaryReader(File.Open(path,FileMode.Open)))
+            foreach (Detail Detail_bin in Detail1)
             {
-                while (reader.PeekChar() > -1)
-                {
-                    Detail[] Detail_bin = new Detail[LENGTH];
-                    Detail1_bin.Code = reader.ReadByte();
-                }
-            }*/
-        
-        
+                writer.Write(Detail_bin.Code);
+                writer.Write(Detail_bin.Adres);
+                writer.Write(Detail_bin.Count);
+            }
+        }
+
+        using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
+        {
+            List<Detail> Details_bin = new List<Detail>();
+            while (reader.PeekChar() > -1)
+            {
+                int code = reader.ReadInt32();
+                int adres = reader.ReadInt32();
+                int count = reader.ReadInt32();
+                Details_bin.Add(new Detail(code, adres, count));
+            }
+            foreach (Detail Details in Details_bin)
+            {
+                Console.WriteLine($"Код: {Details.Code}  Адрес: {Details.Adres}   Количество{Details.Count}");
+            }
+        }
+
+       
+
+
         int Answer()
         {
             int result = Convert.ToInt32(Console.ReadLine());
