@@ -221,9 +221,10 @@ internal class Program
                 }
                 
             }
+              
             Detail[] Detail1 = Details_Otgruz.ToArray();
 
-            Detail[] Detail2 = new Detail[Detail1.Length - 1];
+            Detail[] Detail2 = new Detail[Detail1.Length];
 
             uint count1 = 0;
             for (int i = 0; i < Detail1.Length; i++)
@@ -239,6 +240,11 @@ internal class Program
                 }
 
             }
+
+            /* for (int i = 0; i < 13; i++)// отладочная печать
+             {
+                  Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail2[i].Code, Detail2[i].Adres, Detail2[i].Count);
+             }*/
 
             using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
             {
@@ -286,10 +292,10 @@ internal class Program
             Details_Priem.Add(Detail2_new);
             Detail[] Detail_priem = Details_Priem.ToArray();
 
+            File.Delete(path);
 
-                using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
                 {
-
                     foreach (Detail Detail in Detail_priem)
                     {
                         writer.Write(Detail.Code);
