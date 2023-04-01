@@ -18,29 +18,7 @@ internal class Program
         Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
 
 
-        int LENGTH = 10;
-
-        //sklad1.Storage storage = new sklad1.Storage(2);
-
-
-        /*int[] code_mass = new int[LENGTH];
-        int[] adres_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
-        int[] count_mass = new int[10] { 34, 54, 56, 29, 6, 582, 116, 34, 55, 78 };
-
-        for (int i = 0; i < LENGTH; i++)
-            code_mass[i] = 20 + i;
-
-        //for (int i = 0; i < LENGTH; i++)
-        //  adres_mass[i] = 200 + i;
-
-        */
-       // Detail[] Detail1 = new Detail[LENGTH];
-        /*for (int i = 0; i < LENGTH; i++)
-        {
-            Detail1[i] = new Detail(code_mass[i], adres_mass[i], count_mass[i]);
-        }
-
-        */
+     
 
         string path = @"C:\Users\79152\source\repos\sklad1\Details.bat";
 
@@ -56,7 +34,7 @@ internal class Program
              }
          }
         */
-        List<Detail> Details_bin = new List<Detail>();
+      /* List<Detail> Details_bin = new List<Detail>();
 
         using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
         {
@@ -68,15 +46,8 @@ internal class Program
                 Details_bin.Add(new Detail(code, adres, count));
             }
             
-        }
+        }*/
 
-        Detail[] Detail1 = new Detail[20];
-        Detail1 = Details_bin.ToArray();
-
-        for (int i = 0; i < Detail1.Length; i++)
-        {
-            Console.WriteLine($"Код: {Detail1[i].Code}  Адрес: {Detail1[i].Adres}   Количество:{Detail1[i].Count}");
-        }
 
 
         int Answer()
@@ -95,25 +66,28 @@ internal class Program
             switch (vibor)
             {
                 case 1:
-                    PrintMass(Detail1.Length + 1, Priem(LENGTH, Detail1));
+                    Priem();
+                    PrintMass();
                     break;
                 case 2:
-                    PrintMass(Detail1.Length - 1, Otgruz(LENGTH, Detail1));
+                    Otgruz();
+                    PrintMass();
                     break;
                 case 3:
-                    PrintMass(LENGTH, Detail1);
+                    PrintMass();
                     break;
                 case 4:
-                    SortCode();
+                   // SortCode();
                     break;
                 case 5:
-                    SearchCountCode();
+                   // SearchCountCode();
                     break;
                 case 6:
-                    SearchCountAll();
+                   // SearchCountAll();
                     break;
                 case 7:
-                    PrintMass(LENGTH, SortAdres(Detail1));
+                    PrintMass();
+                   // SortAdres(Detail1);
                     break;
             }
         } while (vibor != 0);
@@ -121,7 +95,7 @@ internal class Program
 
         Detail[] SortAdres(Detail[] Detail1)
         {
-            Detail[] Detail2 = new Detail[Detail1.Length];//тут нужно не [LENGTH]; т.к. длина нужна такая же как и в Detail1
+            Detail[] Detail2 = new Detail[Detail1.Length];
                                                           //копируем исходный массив в нужный
             uint counter = 0;
             foreach (Detail detail in Detail1)
@@ -151,7 +125,7 @@ internal class Program
             detail2 = temp;
         }
 
-        void SearchCountAll()
+      /*  void SearchCountAll()
         {
             Console.WriteLine("Введите код детали:");
             int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
@@ -199,32 +173,66 @@ internal class Program
                 }
             }
 
-        }
+        }*/
 
-        void PrintMass(int LENGTH, Detail[] Detail1)
+        void PrintMass()
         {
-            for (int i = 0; i < LENGTH; i++)
+            List<Detail> Details_Print = new List<Detail>();
+
+            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
             {
-                Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
+                while (reader.PeekChar() > -1)
+                {
+                    int code = reader.ReadInt32();
+                    int adres = reader.ReadInt32();
+                    int count = reader.ReadInt32();
+                    Details_Print.Add(new Detail(code, adres, count));
+
+                }
             }
+
+            Detail[] Detail = new Detail[50];
+            Detail = Details_Print.ToArray();
+
+            for (int i = 0; i < Details_Print.Count; i++)
+            {
+                Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail[i].Code, Detail[i].Adres, Detail[i].Count);
+            }
+            Details_Print.Clear();
         }
 
 
 
-        Detail[] Otgruz(int LENGTH, Detail[] Detail1)
+        void Otgruz()
         {
             Console.WriteLine("Введите код детали, которую хотите удалить:");
 
             int code_int = Convert.ToInt32(Console.ReadLine());
+            List<Detail> Details_Otgruz = new List<Detail>();
 
-            Detail[] Detail2 = new Detail[LENGTH];
 
-            uint count = 0;
-            for (int i = 0; i < LENGTH; i++)
+            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
+            {
+                while (reader.PeekChar() > -1)
+                {
+                    int code = reader.ReadInt32();
+                    int adres = reader.ReadInt32();
+                    int count = reader.ReadInt32();
+                    Details_Otgruz.Add(new Detail(code, adres, count));
+                }
+                
+            }
+            Detail[] Detail1 = new Detail[20];
+            Detail1 = Details_Otgruz.ToArray();
+
+            Detail[] Detail2 = new Detail[20];
+
+            uint count1 = 0;
+            for (int i = 0; i < Detail1.Length; i++)
             {
                 if (code_int != Detail1[i].Code)
                 {
-                    Detail2[count++] = Detail1[i];
+                    Detail2[count1++] = Detail1[i];
                 }
 
                 else
@@ -233,13 +241,31 @@ internal class Program
                 }
 
             }
+            Details_Otgruz.Clear();
 
-            return Detail2;
+            //for (int i = 0;i < Detail2.Length;i++)
+            Details_Otgruz.AddRange(Detail2);
+
+            Detail[] Detail_otgruz = Details_Otgruz.ToArray();
+
+            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+            {
+
+                foreach (Detail Detail in Detail_otgruz)
+                {
+                    writer.Write(Detail.Code);
+                    writer.Write(Detail.Adres);
+                    writer.Write(Detail.Count);
+                }
+            }
+
+            Details_Otgruz.Clear();
+
         }
 
 
 
-        Detail[] Priem(int LENGTH, Detail[] Detail1)
+        void Priem()
         {
             Console.WriteLine("Введите код детали:");
             int code_int = Convert.ToInt32(Console.ReadLine());
@@ -250,16 +276,37 @@ internal class Program
             Console.WriteLine("Введите количество:");
             int count_int = Convert.ToInt32(Console.ReadLine());
 
-            int LENGTH2 = LENGTH + 1;
-            Detail[] Detail2 = new Detail[LENGTH2];
+            List<Detail> Details_Priem = new List<Detail>();
 
-            for (int i = 0; i < LENGTH; i++)
+            Detail Detail2_new = new Detail(code_int, adres_int, count_int);
+
+            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
             {
-                Detail2[i] = Detail1[i];
-            }
-            Detail2[LENGTH2 - 1] = new Detail(code_int, adres_int, count_int);
 
-            return Detail2;
+                while (reader.PeekChar() > -1)
+                {
+                    int code = reader.ReadInt32();
+                    int adres = reader.ReadInt32();
+                    int count = reader.ReadInt32();
+                    Details_Priem.Add(new Detail(code, adres, count));
+                }
+            }
+            Details_Priem.Add(Detail2_new);
+            Detail[] Detail_priem = Details_Priem.ToArray();
+
+
+                using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+                {
+
+                    foreach (Detail Detail in Detail_priem)
+                    {
+                        writer.Write(Detail.Code);
+                        writer.Write(Detail.Adres);
+                        writer.Write(Detail.Count);
+                    }
+                }
+
+            Details_Priem.Clear();
         } 
     }
 }
