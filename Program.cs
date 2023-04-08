@@ -22,6 +22,39 @@ internal class Program
 
         string path = @"C:\Users\79152\source\repos\sklad1\Details.bat";
 
+        List<Detail> ReadFile()
+        {
+            List<Detail> list = new List<Detail>();
+            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
+            {
+                while (reader.PeekChar() > -1)
+                {
+                    int code = reader.ReadInt32();
+                    int adres = reader.ReadInt32();
+                    int count = reader.ReadInt32();
+                    list.Add(new Detail(code, adres, count));
+
+                }
+            }
+            return list;
+        }
+
+        void WriteToFile(Detail[] detail)
+        {
+            File.Delete(path);
+
+            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+            {
+                foreach (Detail Detail in detail)
+                {
+                    writer.Write(Detail.Code);
+                    writer.Write(Detail.Adres);
+                    writer.Write(Detail.Count);
+                }
+            }
+
+        }
+
         /* using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
          {
              //Detail[] Detail1 = new Detail[20];
@@ -34,19 +67,19 @@ internal class Program
              }
          }
         */
-      /* List<Detail> Details_bin = new List<Detail>();
+        /* List<Detail> Details_bin = new List<Detail>();
 
-        using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
-        {
-            while (reader.PeekChar() > -1)
-            {
-                int code = reader.ReadInt32();
-                int adres = reader.ReadInt32();
-                int count = reader.ReadInt32();
-                Details_bin.Add(new Detail(code, adres, count));
-            }
-            
-        }*/
+          using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
+          {
+              while (reader.PeekChar() > -1)
+              {
+                  int code = reader.ReadInt32();
+                  int adres = reader.ReadInt32();
+                  int count = reader.ReadInt32();
+                  Details_bin.Add(new Detail(code, adres, count));
+              }
+
+          }*/
 
 
 
@@ -77,24 +110,27 @@ internal class Program
                     PrintMass();
                     break;
                 case 4:
-                   // SortCode();
+                    SortCode();
                     break;
                 case 5:
-                   // SearchCountCode();
+                    SearchCountCode();
                     break;
                 case 6:
-                   // SearchCountAll();
+                    SearchCountAll();
                     break;
                 case 7:
-                    PrintMass();
-                   // SortAdres(Detail1);
+                    SortAdres();
                     break;
             }
         } while (vibor != 0);
 
 
-        Detail[] SortAdres(Detail[] Detail1)
+        void SortAdres()
         {
+            List<Detail> Details_SearchCountAll = ReadFile();
+
+            Detail[] Detail1 = Details_SearchCountAll.ToArray();
+
             Detail[] Detail2 = new Detail[Detail1.Length];
                                                           //копируем исходный массив в нужный
             uint counter = 0;
@@ -114,8 +150,10 @@ internal class Program
                     }
                 }
             }
-
-            return Detail2;
+            for (int i = 0; i < Detail2.Length; i++)
+            {
+                Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail2[i].Code, Detail2[i].Adres, Detail2[i].Count);
+            }
         }
 
         void swapDetail(ref Detail detail1, ref Detail detail2)
@@ -125,10 +163,15 @@ internal class Program
             detail2 = temp;
         }
 
-      /*  void SearchCountAll()
+        void SearchCountAll()
         {
             Console.WriteLine("Введите код детали:");
             int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
+
+            List<Detail> Details_SearchCountAll = ReadFile();
+
+            Detail[] Detail1 = Details_SearchCountAll.ToArray();
+
 
             for (int i = 0; i < Detail1.Length; i++)
             {
@@ -142,11 +185,16 @@ internal class Program
                 }
             }
         }
+      
 
         void SearchCountCode()
         {
             Console.WriteLine("Введите код детали:");
             int code_int = Convert.ToInt32(Console.ReadLine());
+
+            List<Detail> Details_SearchCountCode = ReadFile();
+
+            Detail[] Detail1 = Details_SearchCountCode.ToArray();
 
             for (int i = 0; i < Detail1.Length; i++)
             {
@@ -158,46 +206,37 @@ internal class Program
             }
         }
 
-
+      
         void SortCode()
         {
             Console.WriteLine("Введите код детали:");
             int code_int = Convert.ToInt32(Console.ReadLine());
+
+            List<Detail> Details_SortCode = ReadFile();
+
+            Detail[] Detail1 = Details_SortCode.ToArray();
 
             for (int i = 0; i < Detail1.Length; i++)
             {
 
                 if (code_int == Detail1[i].Code)
                 {
-                    Console.WriteLine("{0}, {1}, {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
+                    Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
                 }
             }
 
-        }*/
+        }
 
         void PrintMass()
         {
-            List<Detail> Details_Print = new List<Detail>();
-
-            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
-            {
-                while (reader.PeekChar() > -1)
-                {
-                    int code = reader.ReadInt32();
-                    int adres = reader.ReadInt32();
-                    int count = reader.ReadInt32();
-                    Details_Print.Add(new Detail(code, adres, count));
-
-                }
-            }
+            List<Detail> Details_Print = ReadFile();
 
             Detail[] Detail = Details_Print.ToArray();
 
             for (int i = 0; i < Detail.Length; i++)
             {
                 Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail[i].Code, Detail[i].Adres, Detail[i].Count);
-            }
-            Details_Print.Clear();
+            } 
         }
 
 
@@ -207,31 +246,17 @@ internal class Program
             Console.WriteLine("Введите код детали, которую хотите удалить:");
 
             int code_int = Convert.ToInt32(Console.ReadLine());
-            List<Detail> Details_Otgruz = new List<Detail>();
+            List<Detail> Details_Otgruz = ReadFile();
 
-
-            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
-            {
-                while (reader.PeekChar() > -1)
-                {
-                    int code = reader.ReadInt32();
-                    int adres = reader.ReadInt32();
-                    int count = reader.ReadInt32();
-                    Details_Otgruz.Add(new Detail(code, adres, count));
-                }
-                
-            }
-              
             Detail[] Detail1 = Details_Otgruz.ToArray();
 
-            Detail[] Detail2 = new Detail[Detail1.Length];
+            List<Detail> DetailsOtgruzNew = new List<Detail>();
 
-            uint count1 = 0;
-            for (int i = 0; i < Detail1.Length; i++)
+            for (int i = 0; i < Details_Otgruz.Count; i++)
             {
                 if (code_int != Detail1[i].Code)
                 {
-                    Detail2[count1++] = Detail1[i];
+                    DetailsOtgruzNew.Add(Detail1[i]);
                 }
 
                 else
@@ -241,24 +266,9 @@ internal class Program
 
             }
 
-            /* for (int i = 0; i < 13; i++)// отладочная печать
-             {
-                  Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail2[i].Code, Detail2[i].Adres, Detail2[i].Count);
-             }*/
+            Detail[] Detail2 = DetailsOtgruzNew.ToArray();
 
-            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
-            {
-
-                foreach (Detail Detail in Detail2)
-                {
-                    writer.Write(Detail.Code);
-                    writer.Write(Detail.Adres);
-                    writer.Write(Detail.Count);
-                }
-            }
-
-            Details_Otgruz.Clear();
-
+            WriteToFile(Detail2);
         }
 
 
@@ -274,37 +284,14 @@ internal class Program
             Console.WriteLine("Введите количество:");
             int count_int = Convert.ToInt32(Console.ReadLine());
 
-            List<Detail> Details_Priem = new List<Detail>();
+            List<Detail> Details_Priem = ReadFile();
 
             Detail Detail2_new = new Detail(code_int, adres_int, count_int);
-
-            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
-            {
-
-                while (reader.PeekChar() > -1)
-                {
-                    int code = reader.ReadInt32();
-                    int adres = reader.ReadInt32();
-                    int count = reader.ReadInt32();
-                    Details_Priem.Add(new Detail(code, adres, count));
-                }
-            }
             Details_Priem.Add(Detail2_new);
+
             Detail[] Detail_priem = Details_Priem.ToArray();
 
-            File.Delete(path);
-
-            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
-                {
-                    foreach (Detail Detail in Detail_priem)
-                    {
-                        writer.Write(Detail.Code);
-                        writer.Write(Detail.Adres);
-                        writer.Write(Detail.Count);
-                    }
-                }
-
-            Details_Priem.Clear();
+            WriteToFile(Detail_priem);
         } 
     }
 }
