@@ -9,14 +9,18 @@ internal class Program
     private static void Main(string[] args)
     {
         Console.WriteLine("ВЫБЕРИТЕ ДЕЙСТВИЕ:");
-        Console.WriteLine("1 - Приемка");
-        Console.WriteLine("2 - Отгрузка");
-        Console.WriteLine("3 - Вывод на экран");
-        Console.WriteLine("4 - Фильтрация массива по коду");
-        Console.WriteLine("5 - Поиск суммарного кол-ва по заданному коду");
-        Console.WriteLine("6 - Поиск суммарного кол-ва по каждому из кодов детали");
-        Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
+        PrintMenu();
 
+        void PrintMenu()
+        {
+            Console.WriteLine("1 - Приемка");
+            Console.WriteLine("2 - Отгрузка");
+            Console.WriteLine("3 - Вывод на экран");
+            Console.WriteLine("4 - Фильтрация массива по коду");
+            Console.WriteLine("5 - Поиск суммарного кол-ва по заданному коду");
+            Console.WriteLine("6 - Поиск суммарного кол-ва по каждому из кодов детали");
+            Console.WriteLine("7 - Сортировка по полю Адрес ячейки");
+        }
 
      
 
@@ -55,33 +59,6 @@ internal class Program
 
         }
 
-        /* using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
-         {
-             //Detail[] Detail1 = new Detail[20];
-
-             foreach (Detail Detail_bin in Detail1)
-             {
-                 writer.Write(Detail_bin.Code);
-                 writer.Write(Detail_bin.Adres);
-                 writer.Write(Detail_bin.Count);
-             }
-         }
-        */
-        /* List<Detail> Details_bin = new List<Detail>();
-
-          using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
-          {
-              while (reader.PeekChar() > -1)
-              {
-                  int code = reader.ReadInt32();
-                  int adres = reader.ReadInt32();
-                  int count = reader.ReadInt32();
-                  Details_bin.Add(new Detail(code, adres, count));
-              }
-
-          }*/
-
-
 
         int Answer()
         {
@@ -95,7 +72,6 @@ internal class Program
         {
             vibor = Answer();
 
-            Console.WriteLine("Для выхода нажмите 0");
             switch (vibor)
             {
                 case 1:
@@ -121,7 +97,12 @@ internal class Program
                 case 7:
                     SortAdres();
                     break;
+                case 8:
+                    PrintMenu();
+                    break;
             }
+            Console.WriteLine("\n\nДля выхода нажмите 0, для вызова меню - 8\n\n");
+
         } while (vibor != 0);
 
 
@@ -129,30 +110,21 @@ internal class Program
         {
             List<Detail> Details_SearchCountAll = ReadFile();
 
-            Detail[] Detail1 = Details_SearchCountAll.ToArray();
+            Detail[] Detail = Details_SearchCountAll.ToArray();
 
-            Detail[] Detail2 = new Detail[Detail1.Length];
-                                                          //копируем исходный массив в нужный
-            uint counter = 0;
-            foreach (Detail detail in Detail1)
+            for (int i = 0; i < Detail.Length - 1; i++)
             {
-                Detail2[counter++] = detail;
-            }
-            //обрабатываем скопированный массив, чтобы вернуть отсортированную копию, но не трогаем оригинал 
-            for (int i = 0; i < Detail2.Length - 1; i++)
-            {
-                for (int j = i + 1; j < Detail2.Length; j++)
+                for (int j = i + 1; j < Detail.Length; j++)
                 {
-                    if (Detail2[i].Adres > Detail2[j].Adres)
+                    if (Detail[i].Adres > Detail[j].Adres)
                     {
-                        //используем самописный swap
-                        swapDetail(ref Detail2[i], ref Detail2[j]);
+                        swapDetail(ref Detail[i], ref Detail[j]);
                     }
                 }
             }
-            for (int i = 0; i < Detail2.Length; i++)
+            for (int i = 0; i < Detail.Length; i++)
             {
-                Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail2[i].Code, Detail2[i].Adres, Detail2[i].Count);
+                Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail[i].Code, Detail[i].Adres, Detail[i].Count);
             }
         }
 
@@ -170,19 +142,25 @@ internal class Program
 
             List<Detail> Details_SearchCountAll = ReadFile();
 
-            Detail[] Detail1 = Details_SearchCountAll.ToArray();
+            Detail[] Detail = Details_SearchCountAll.ToArray();
 
+            int error = 0;
 
-            for (int i = 0; i < Detail1.Length; i++)
+            for (int i = 0; i < Detail.Length; i++)
             {
                 for (int j = 0; j < arr.Length; j++)
                 {
 
-                    if (arr[j] == Detail1[i].Code)
+                    if (arr[j] == Detail[i].Code)
                     {
-                        Console.WriteLine(" Количество деталей c кодом {1} на складе: {0}", Detail1[i].Count, Detail1[i].Code);
+                        Console.WriteLine(" Количество деталей c кодом {1} на складе: {0}", Detail[i].Count, Detail[i].Code);
+                        error++;
                     }
                 }
+            }
+            if (error == 0)
+            {
+                Console.WriteLine("Деталей с заданными кодами не найдено");
             }
         }
       
@@ -194,16 +172,24 @@ internal class Program
 
             List<Detail> Details_SearchCountCode = ReadFile();
 
-            Detail[] Detail1 = Details_SearchCountCode.ToArray();
+            Detail[] Detail = Details_SearchCountCode.ToArray();
 
-            for (int i = 0; i < Detail1.Length; i++)
+            int error = 0;
+
+            for (int i = 0; i < Detail.Length; i++)
             {
 
-                if (code_int == Detail1[i].Code)
+                if (code_int == Detail[i].Code)
                 {
-                    Console.WriteLine(" Количество деталей на складе: {0}", Detail1[i].Count);
+                    Console.WriteLine(" Количество деталей на складе: {0}", Detail[i].Count);
+                    error++;
                 }
+                
             }
+                if (error == 0)
+                {
+                    Console.WriteLine("Деталей с заданным кодом не найдено");
+                }
         }
 
       
@@ -214,14 +200,14 @@ internal class Program
 
             List<Detail> Details_SortCode = ReadFile();
 
-            Detail[] Detail1 = Details_SortCode.ToArray();
+            Detail[] Detail = Details_SortCode.ToArray();
 
-            for (int i = 0; i < Detail1.Length; i++)
+            for (int i = 0; i < Detail.Length; i++)
             {
 
-                if (code_int == Detail1[i].Code)
+                if (code_int == Detail[i].Code)
                 {
-                    Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail1[i].Code, Detail1[i].Adres, Detail1[i].Count);
+                    Console.WriteLine("Код: {0}, Адрес ячейки: {1}, Количество: {2}", Detail[i].Code, Detail[i].Adres, Detail[i].Count);
                 }
             }
 
@@ -248,15 +234,15 @@ internal class Program
             int code_int = Convert.ToInt32(Console.ReadLine());
             List<Detail> Details_Otgruz = ReadFile();
 
-            Detail[] Detail1 = Details_Otgruz.ToArray();
+            Detail[] Detail = Details_Otgruz.ToArray();
 
             List<Detail> DetailsOtgruzNew = new List<Detail>();
 
             for (int i = 0; i < Details_Otgruz.Count; i++)
             {
-                if (code_int != Detail1[i].Code)
+                if (code_int != Detail[i].Code)
                 {
-                    DetailsOtgruzNew.Add(Detail1[i]);
+                    DetailsOtgruzNew.Add(Detail[i]);
                 }
 
                 else
